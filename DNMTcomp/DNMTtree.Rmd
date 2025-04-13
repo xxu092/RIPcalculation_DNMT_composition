@@ -1,0 +1,36 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+library(tidyverse)
+library(ggtree)
+library(ape)
+library(ggplot2)
+tree <- read.tree("~/bigdata/DNMTsearch/04222024/allDNMTs4.hmmalign.trim.fasaln.treefile")
+p1<- ggtree(tree) +theme_tree2()
+p1+geom_tiplab(align=T) +geom_nodelab(size=2,hjust = -0.1) +xlim(0,70)
+
+treeR <- root(tree, outgroup = "AIM|RPA73956.1", edgelabel = TRUE)
+p<- ggtree(treeR) +theme_tree2()
+print(p)
+p+geom_tiplab() +geom_nodelab(size=2,hjust = -0.1) 
+
+
+
+p+geom_tiplab(align = T)+ geom_text(aes(label=node))+ xlim(0,70) 
+fig5b<-p+geom_tiplab(align = T) +geom_nodelab(size=2,hjust = -0.1) + xlim(0,70)+
+  geom_cladelab(node=62,label="Dim-2",offset=15,align=TRUE) +
+  geom_cladelab(node=43,label = "Dnmt1",offset=15,align=TRUE) +
+  geom_cladelab(node=61,label="RID/Masc",offset=15,align=TRUE) +
+  geom_cladelab(node=60,label="Dnmt5",offset=15,align=TRUE) +
+  geom_cladelab(node=48,label="Dnmt2b",offset=15,align=TRUE)+
+  geom_cladelab(node=54,label="Dnmt2a",offset=15,align=TRUE)
+
+```
+
