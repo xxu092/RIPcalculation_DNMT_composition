@@ -10,7 +10,7 @@ This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute
 
 Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
 
-
+This is to generate gff3 files to run RIPCAL, top5 TE family, highly similar elements locations. 
 use curated family location table
 ```{r}
 library(tidyverse)
