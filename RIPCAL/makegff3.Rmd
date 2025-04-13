@@ -1,0 +1,185 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+```{r}
+
+```
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+
+use curated family location table
+```{r}
+library(tidyverse)
+emaitop5<-read_tsv("~/bigdata/RIPCAL/Emai/emaitop5curated/emaitop5loc.tsv",col_names = F)
+```
+
+```{r}
+emaitop5<-separate(emaitop5,X1,into =c("chromosome","feature1","feature2"),sep = ":")
+emaitop5$feature1<-sub("_LTR","",emaitop5$feature1)
+emaitop5$feature1<-sub("_INT","",emaitop5$feature1)
+emaitop5<-emaitop5 %>% separate(feature1,into = c("loc","family"),sep = "__")
+emaitop5<-emaitop5 %>% separate(loc,into = c("start","end"),sep = "-")
+emaitop5<-emaitop5 %>% separate(feature2,into = c("loc2","strand"),sep = "_")
+emaitop5$strand<-sub("orient=","",emaitop5$strand)
+```
+```{r}
+emaitop5$source<-"RepeatMasker"
+emaitop5$type<-"repeat_region"
+emaitop5$score<-"."
+emaitop5$phase<-"."
+emaitop5<-emaitop5 %>% mutate(attributes = paste0("Target=",emaitop5$family," ",emaitop5$loc2))
+```
+```{r}
+emaitop5gff<-emaitop5 %>% select(c("chromosome","source","type","start","end","score","strand","phase","attributes"))
+write_tsv(emaitop5gff,"~/bigdata/RIPCAL/Emai/emaitop5.gff3",col_names = F)
+```
+```{r}
+emustop5<-read_tsv("~/bigdata/RIPCAL/Emus/Emustop5cluster/emustop5cluloc.tsv",col_names = F)
+emustop5<-separate(emustop5,X1,into =c("chromosome","feature1","feature2"),sep = ":")
+emustop5$feature1<-sub("_LTR","",emustop5$feature1)
+emustop5$feature1<-sub("_INT","",emustop5$feature1)
+emustop5<-emustop5 %>% separate(feature1,into = c("loc","family"),sep = "__")
+emustop5<-emustop5 %>% separate(loc,into = c("start","end"),sep = "-")
+emustop5<-emustop5 %>% separate(feature2,into = c("loc2","strand"),sep = "_")
+emustop5$strand<-sub("orient=","",emustop5$strand)
+```
+```{r}
+emustop5$source<-"RepeatMasker"
+emustop5$type<-"repeat_region"
+emustop5$score<-"."
+emustop5$phase<-"."
+emustop5<-emustop5 %>% mutate(attributes = paste0("Target=",emustop5$family," ",emustop5$loc2))
+emustop5gff<-emustop5 %>% select(c("chromosome","source","type","start","end","score","strand","phase","attributes"))
+```
+```{r}
+write_tsv(emustop5gff,"~/bigdata/RIPCAL/Emus/emustop5.gff3",col_names = F)
+```
+```{r}
+mcictop5<-read_tsv("~/bigdata/RIPCAL/Mcic/mcictop5/mcictop5cluloc.tsv",col_names = F)
+mcictop5<-separate(mcictop5,X1,into =c("chromosome","feature1","feature2"),sep = ":")
+mcictop5$feature1<-sub("_LTR","",mcictop5$feature1)
+mcictop5$feature1<-sub("_INT","",mcictop5$feature1)
+mcictop5<-mcictop5 %>% separate(feature1,into = c("loc","family"),sep = "__")
+mcictop5<-mcictop5 %>% separate(loc,into = c("start","end"),sep = "-")
+mcictop5<-mcictop5 %>% separate(feature2,into = c("loc2","strand"),sep = "_")
+mcictop5$strand<-sub("orient=","",mcictop5$strand)
+```
+```{r}
+mcictop5$source<-"RepeatMasker"
+mcictop5$type<-"repeat_region"
+mcictop5$score<-"."
+mcictop5$phase<-"."
+mcictop5<-mcictop5 %>% mutate(attributes = paste0("Target=",mcictop5$family," ",mcictop5$loc2))
+mcictop5gff<-mcictop5 %>% select(c("chromosome","source","type","start","end","score","strand","phase","attributes"))
+```
+```{r}
+write_tsv(mcictop5gff,"~/bigdata/RIPCAL/Mcic/mcictop5.gff3",col_names = F)
+```
+```{r}
+zradtop5<-read_tsv("~/bigdata/RIPCAL/Zrad/zradtop5/zradtop5cluloc.tsv",col_names = F)
+zradtop5<-separate(zradtop5,X1,into =c("chromosome","feature1","feature2"),sep = ":")
+zradtop5$feature1<-sub("_LTR","",zradtop5$feature1)
+zradtop5$feature1<-sub("_INT","",zradtop5$feature1)
+zradtop5<-zradtop5 %>% separate(feature1,into = c("loc","family"),sep = "__")
+zradtop5<-zradtop5 %>% separate(loc,into = c("start","end"),sep = "-")
+zradtop5<-zradtop5 %>% separate(feature2,into = c("loc2","strand"),sep = "_")
+zradtop5$strand<-sub("orient=","",zradtop5$strand)
+```
+```{r}
+zradtop5$source<-"RepeatMasker"
+zradtop5$type<-"repeat_region"
+zradtop5$score<-"."
+zradtop5$phase<-"."
+zradtop5<-zradtop5 %>% mutate(attributes = paste0("Target=",zradtop5$family," ",zradtop5$loc2))
+zrad1001<-zradtop5 %>% filter((family == "TE_00001001")) %>% head(500)
+zradrest<-zradtop5 %>% filter((family != "TE_00001001"))
+zradtop5_2<-rbind(zrad1001,zradrest)
+zradtop5gff<-zradtop5_2 %>% select(c("chromosome","source","type","start","end","score","strand","phase","attributes"))
+```
+```{r}
+write_tsv(zradtop5gff,"~/bigdata/RIPCAL/Zrad/zradtop5.gff3",col_names = F)
+```
+Do version 2 with better alignment
+```{r}
+library(tidyverse)
+emaitop5v2<-read_tsv("~/bigdata/RIPCAL/Emai/emaitop5curatedV2/Emaitop5clulocV2.tsv",col_names = F)
+```
+
+```{r}
+emaitop5v2<-separate(emaitop5v2,X1,into =c("chromosome","feature1","feature2"),sep = ":")
+emaitop5v2$feature1<-sub("_LTR","",emaitop5v2$feature1)
+emaitop5v2$feature1<-sub("_INT","",emaitop5v2$feature1)
+emaitop5v2<-emaitop5v2 %>% separate(feature1,into = c("loc","family"),sep = "__")
+emaitop5v2<-emaitop5v2 %>% separate(loc,into = c("start","end"),sep = "-")
+emaitop5v2<-emaitop5v2 %>% separate(feature2,into = c("loc2","strand"),sep = "_")
+emaitop5v2$strand<-sub("orient=","",emaitop5v2$strand)
+```
+```{r}
+emaitop5v2$source<-"RepeatMasker"
+emaitop5v2$type<-"repeat_region"
+emaitop5v2$score<-"."
+emaitop5v2$phase<-"."
+emaitop5v2<-emaitop5v2 %>% mutate(attributes = paste0("Target=",emaitop5v2$family," ",emaitop5v2$loc2))
+emaitop5v2%>% group_by(family) %>% summarise(n=n())
+```
+```{r}
+emai1435v2<-emaitop5v2 %>% filter((family == "TE_00001435")) %>% head(500)
+emai2374v2<-emaitop5v2 %>% filter((family == "TE_00002374")) %>% head(500)
+emairest<-emaitop5v2 %>% filter((family != "TE_00001435")) %>% filter(family != "TE_00002374")
+emaitop5_2<-rbind(emai1435v2,emai2374v2,emairest)
+```
+```{r}
+emaitop5gffv2<-emaitop5_2 %>% select(c("chromosome","source","type","start","end","score","strand","phase","attributes"))
+write_tsv(emaitop5gffv2,"~/bigdata/RIPCAL/Emai/emaitop5V2.gff3",col_names = F)
+```
+```{r}
+library(tidyverse)
+zradtop5v2<-read_tsv("~/bigdata/RIPCAL/Zrad/zradtop5V2/zradtop5clulocV2.tsv",col_names = F)
+zradtop5v2<-separate(zradtop5v2,X1,into =c("chromosome","feature1","feature2"),sep = ":")
+zradtop5v2$feature1<-sub("_LTR","",zradtop5v2$feature1)
+zradtop5v2$feature1<-sub("_INT","",zradtop5v2$feature1)
+zradtop5v2<-zradtop5v2 %>% separate(feature1,into = c("loc","family"),sep = "__")
+zradtop5v2<-zradtop5v2 %>% separate(loc,into = c("start","end"),sep = "-")
+zradtop5v2<-zradtop5v2 %>% separate(feature2,into = c("loc2","strand"),sep = "_")
+zradtop5v2$strand<-sub("orient=","",zradtop5v2$strand)
+```
+```{r}
+zradtop5v2$source<-"RepeatMasker"
+zradtop5v2$type<-"repeat_region"
+zradtop5v2$score<-"."
+zradtop5v2$phase<-"."
+zradtop5v2<-zradtop5v2 %>% mutate(attributes = paste0("Target=",zradtop5v2$family," ",zradtop5v2$loc2))
+
+zradtop5gffv2<-zradtop5v2 %>% select(c("chromosome","source","type","start","end","score","strand","phase","attributes"))
+```
+```{r}
+write_tsv(zradtop5gffv2,"~/bigdata/RIPCAL/Zrad/zradtop5v2.gff3",col_names = F)
+```
+```{r}
+library(tidyverse)
+zrad1169<-read_tsv("~/bigdata/RIPCAL/Zrad/zradtop5V2/zrad1169clulocV2.tsv",col_names = F)
+zrad1169<-separate(zrad1169,X1,into =c("chromosome","feature1","feature2"),sep = ":")
+zrad1169$feature1<-sub("_LTR","",zrad1169$feature1)
+zrad1169$feature1<-sub("_INT","",zrad1169$feature1)
+zrad1169<-zrad1169 %>% separate(feature1,into = c("loc","family"),sep = "__")
+zrad1169<-zrad1169 %>% separate(loc,into = c("start","end"),sep = "-")
+zrad1169<-zrad1169 %>% separate(feature2,into = c("loc2","strand"),sep = "_")
+zrad1169$strand<-sub("orient=","",zrad1169$strand)
+```
+```{r}
+zrad1169$source<-"RepeatMasker"
+zrad1169$type<-"repeat_region"
+zrad1169$score<-"."
+zrad1169$phase<-"."
+zrad1169<-zrad1169 %>% mutate(attributes = paste0("Target=",zrad1169$family," ",zrad1169$loc2))
+
+zrad1169gff<-zrad1169 %>% select(c("chromosome","source","type","start","end","score","strand","phase","attributes"))
+```
+```{r}
+write_tsv(zrad1169gff,"~/bigdata/RIPCAL/Zrad/zrad1169.gff3",col_names = F)
+```
+
